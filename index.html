@@ -1,0 +1,1757 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Reti — Sistemi e Reti</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Syne:wght@400;600;700;800&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0d1117;
+    --surface: #161b22;
+    --surface2: #1e2530;
+    --border: #2a3340;
+    --accent: #00d4a0;
+    --accent2: #f7b731;
+    --accent3: #e84393;
+    --text: #e0e8f0;
+    --text-muted: #7a8fa6;
+    --blue: #4dabf7;
+    --red: #ff6b6b;
+    --green: #51cf66;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'IBM Plex Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* ─── HEADER ─── */
+  header {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 0 2rem;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 60px;
+  }
+
+  .logo {
+    font-family: 'Space Mono', monospace;
+    font-size: 1rem;
+    color: var(--accent);
+    letter-spacing: -0.5px;
+  }
+
+  .logo span { color: var(--text-muted); }
+
+  nav { display: flex; gap: 0.25rem; }
+
+  nav button {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 500;
+    background: none;
+    border: none;
+    color: var(--text-muted);
+    padding: 0.4rem 1rem;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  nav button:hover { color: var(--text); background: var(--surface2); }
+  nav button.active { color: var(--accent); background: rgba(0,212,160,0.1); }
+
+  /* ─── HERO ─── */
+  .hero {
+    padding: 5rem 2rem 3rem;
+    max-width: 900px;
+    margin: 0 auto;
+    text-align: center;
+    animation: fadeIn 0.6s ease;
+  }
+
+  .hero-tag {
+    display: inline-block;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.75rem;
+    color: var(--accent);
+    border: 1px solid var(--accent);
+    padding: 0.25rem 0.75rem;
+    border-radius: 100px;
+    margin-bottom: 1.5rem;
+    letter-spacing: 1px;
+  }
+
+  .hero h1 {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(2.5rem, 6vw, 4.5rem);
+    font-weight: 800;
+    line-height: 1.05;
+    margin-bottom: 1.25rem;
+    background: linear-gradient(135deg, #fff 0%, var(--accent) 60%, var(--blue) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .hero p {
+    font-size: 1.1rem;
+    color: var(--text-muted);
+    max-width: 560px;
+    margin: 0 auto 2.5rem;
+    line-height: 1.7;
+  }
+
+  .hero-btns { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
+
+  .btn-primary {
+    background: var(--accent);
+    color: #0d1117;
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-weight: 600;
+    font-size: 0.9rem;
+    border: none;
+    padding: 0.75rem 1.75rem;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .btn-primary:hover { opacity: 0.85; transform: translateY(-1px); }
+
+  .btn-secondary {
+    background: none;
+    color: var(--text);
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-weight: 500;
+    font-size: 0.9rem;
+    border: 1px solid var(--border);
+    padding: 0.75rem 1.75rem;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .btn-secondary:hover { border-color: var(--accent); color: var(--accent); }
+
+  /* ─── MAIN CONTENT ─── */
+  main {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 0 2rem 4rem;
+  }
+
+  section { display: none; animation: fadeIn 0.4s ease; }
+  section.active { display: block; }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(12px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ─── SECTION TITLE ─── */
+  .sec-header {
+    border-left: 3px solid var(--accent);
+    padding-left: 1rem;
+    margin-bottom: 2.5rem;
+  }
+
+  .sec-header h2 {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.8rem;
+    font-weight: 700;
+  }
+
+  .sec-header p { color: var(--text-muted); margin-top: 0.35rem; font-size: 0.95rem; }
+
+  /* ─── CARDS ─── */
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1.75rem;
+    margin-bottom: 1.25rem;
+    transition: border-color 0.2s;
+  }
+
+  .card:hover { border-color: #3a4560; }
+
+  .card h3 {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.05rem;
+    font-weight: 700;
+    margin-bottom: 0.85rem;
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+  }
+
+  .card h3 .icon {
+    width: 28px; height: 28px;
+    background: rgba(0,212,160,0.12);
+    border-radius: 6px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.9rem;
+    flex-shrink: 0;
+  }
+
+  .card p { color: #b0c0d0; line-height: 1.75; font-size: 0.95rem; }
+
+  .card p + p { margin-top: 0.75rem; }
+
+  /* ─── CODE BLOCK ─── */
+  .code-block {
+    background: #0a0d12;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1.25rem 1.5rem;
+    margin: 1rem 0;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.82rem;
+    line-height: 1.7;
+    overflow-x: auto;
+    color: #c9d8e8;
+  }
+
+  .code-block .hl-green { color: var(--accent); }
+  .code-block .hl-yellow { color: var(--accent2); }
+  .code-block .hl-blue { color: var(--blue); }
+  .code-block .hl-red { color: var(--red); }
+  .code-block .hl-muted { color: var(--text-muted); }
+
+  /* ─── TABLE ─── */
+  .table-wrap { overflow-x: auto; margin: 1rem 0; border-radius: 10px; border: 1px solid var(--border); }
+
+  table { width: 100%; border-collapse: collapse; font-size: 0.88rem; }
+
+  thead { background: var(--surface2); }
+  thead th {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.75rem;
+    letter-spacing: 0.5px;
+    color: var(--text-muted);
+    padding: 0.75rem 1rem;
+    text-align: left;
+    text-transform: uppercase;
+    border-bottom: 1px solid var(--border);
+  }
+
+  tbody tr { border-bottom: 1px solid var(--border); transition: background 0.15s; }
+  tbody tr:last-child { border-bottom: none; }
+  tbody tr:hover { background: var(--surface2); }
+
+  td { padding: 0.7rem 1rem; color: var(--text); font-size: 0.88rem; }
+  td .mono { font-family: 'Space Mono', monospace; font-size: 0.8rem; }
+  td .badge {
+    display: inline-block;
+    font-size: 0.72rem;
+    font-weight: 600;
+    padding: 0.15rem 0.55rem;
+    border-radius: 4px;
+    font-family: 'Space Mono', monospace;
+  }
+
+  .badge-a { background: rgba(0,212,160,0.15); color: var(--accent); }
+  .badge-b { background: rgba(77,171,247,0.15); color: var(--blue); }
+  .badge-c { background: rgba(247,183,49,0.15); color: var(--accent2); }
+  .badge-d { background: rgba(232,67,147,0.15); color: var(--accent3); }
+  .badge-e { background: rgba(255,107,107,0.15); color: var(--red); }
+  .badge-priv { background: rgba(81,207,102,0.15); color: var(--green); }
+  .badge-pub { background: rgba(232,67,147,0.15); color: var(--accent3); }
+
+  /* ─── PILLS ─── */
+  .pills { display: flex; gap: 0.5rem; flex-wrap: wrap; margin: 0.75rem 0; }
+  .pill {
+    font-size: 0.78rem;
+    font-family: 'Space Mono', monospace;
+    padding: 0.3rem 0.75rem;
+    border-radius: 100px;
+    border: 1px solid;
+  }
+  .pill-green { border-color: var(--accent); color: var(--accent); }
+  .pill-yellow { border-color: var(--accent2); color: var(--accent2); }
+  .pill-blue { border-color: var(--blue); color: var(--blue); }
+  .pill-red { border-color: var(--red); color: var(--red); }
+
+  /* ─── IP VISUALIZER ─── */
+  .ip-vis {
+    display: flex;
+    gap: 0;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.88rem;
+    border-radius: 8px;
+    overflow: hidden;
+    margin: 1rem 0;
+    border: 1px solid var(--border);
+  }
+
+  .ip-vis .seg {
+    padding: 0.7rem 0;
+    text-align: center;
+    font-weight: 700;
+  }
+
+  .ip-vis .net { background: rgba(0,212,160,0.18); color: var(--accent); }
+  .ip-vis .host { background: rgba(77,171,247,0.18); color: var(--blue); }
+  .ip-vis .sub { background: rgba(247,183,49,0.18); color: var(--accent2); }
+
+  .ip-vis-label {
+    display: flex;
+    font-size: 0.72rem;
+    color: var(--text-muted);
+    margin-bottom: 0.25rem;
+    font-family: 'Space Mono', monospace;
+  }
+
+  /* ─── GRID ─── */
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; }
+  @media (max-width: 640px) { .grid2 { grid-template-columns: 1fr; } }
+
+  /* ─── ESERCIZI ─── */
+  .ex-container {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+    margin-bottom: 2rem;
+  }
+
+  .ex-header {
+    background: var(--surface2);
+    padding: 1.25rem 1.75rem;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .ex-header h3 {
+    font-family: 'Syne', sans-serif;
+    font-size: 1rem;
+    font-weight: 700;
+  }
+
+  .ex-num {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.72rem;
+    color: var(--accent);
+    background: rgba(0,212,160,0.1);
+    padding: 0.2rem 0.6rem;
+    border-radius: 4px;
+  }
+
+  .ex-body { padding: 1.75rem; }
+
+  .ex-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 0.5rem;
+    align-items: center;
+    padding: 0.6rem 0;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .ex-row:last-child { border-bottom: none; }
+  .ex-row.ex-row-2 { grid-template-columns: 1fr 1fr; }
+  .ex-row.ex-row-4 { grid-template-columns: 1fr 1fr 1fr 1fr; }
+
+  .ex-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.8rem;
+    color: var(--text);
+  }
+
+  .ex-input {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 0.45rem 0.75rem;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.78rem;
+    color: var(--text);
+    width: 100%;
+    transition: border-color 0.2s;
+    outline: none;
+  }
+
+  .ex-input:focus { border-color: var(--accent); }
+  .ex-input.correct { border-color: var(--green); background: rgba(81,207,102,0.07); }
+  .ex-input.wrong { border-color: var(--red); background: rgba(255,107,107,0.07); }
+
+  .ex-actions {
+    display: flex;
+    gap: 0.75rem;
+    margin-top: 1.25rem;
+    flex-wrap: wrap;
+  }
+
+  .btn-check {
+    background: var(--accent);
+    color: #0d1117;
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-weight: 600;
+    font-size: 0.85rem;
+    border: none;
+    padding: 0.6rem 1.25rem;
+    border-radius: 7px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .btn-check:hover { opacity: 0.85; }
+
+  .btn-show {
+    background: none;
+    color: var(--text-muted);
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 0.85rem;
+    border: 1px solid var(--border);
+    padding: 0.6rem 1.25rem;
+    border-radius: 7px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .btn-show:hover { border-color: var(--text-muted); color: var(--text); }
+
+  .btn-reset {
+    background: none;
+    color: var(--text-muted);
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 0.85rem;
+    border: 1px solid var(--border);
+    padding: 0.6rem 1.25rem;
+    border-radius: 7px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .score-badge {
+    display: inline-block;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.8rem;
+    padding: 0.4rem 0.75rem;
+    border-radius: 6px;
+    margin-top: 0.75rem;
+  }
+
+  .score-badge.good { background: rgba(81,207,102,0.15); color: var(--green); border: 1px solid var(--green); }
+  .score-badge.bad { background: rgba(255,107,107,0.15); color: var(--red); border: 1px solid var(--red); }
+  .score-badge.mid { background: rgba(247,183,49,0.15); color: var(--accent2); border: 1px solid var(--accent2); }
+
+  /* INTERACTIVE CALC */
+  .calc-box {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1.75rem;
+    margin-bottom: 1.25rem;
+  }
+
+  .calc-box h3 {
+    font-family: 'Syne', sans-serif;
+    font-size: 1rem;
+    font-weight: 700;
+    margin-bottom: 1.25rem;
+    color: var(--accent2);
+  }
+
+  .calc-row { display: flex; gap: 0.75rem; margin-bottom: 0.75rem; align-items: center; flex-wrap: wrap; }
+
+  .calc-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.78rem;
+    color: var(--text-muted);
+    min-width: 130px;
+  }
+
+  .calc-input {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 0.5rem 0.85rem;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.85rem;
+    color: var(--text);
+    width: 200px;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+
+  .calc-input:focus { border-color: var(--accent); }
+
+  .calc-result {
+    background: #0a0d12;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 1.25rem 1.5rem;
+    margin-top: 1.25rem;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.82rem;
+    line-height: 2;
+    display: none;
+  }
+
+  .calc-result.visible { display: block; }
+
+  .callout {
+    background: rgba(0,212,160,0.07);
+    border-left: 3px solid var(--accent);
+    border-radius: 0 8px 8px 0;
+    padding: 1rem 1.25rem;
+    margin: 1rem 0;
+    font-size: 0.9rem;
+    color: #b0d8c8;
+    line-height: 1.7;
+  }
+
+  .callout.yellow {
+    background: rgba(247,183,49,0.07);
+    border-left-color: var(--accent2);
+    color: #d8c8a0;
+  }
+
+  .callout.red {
+    background: rgba(255,107,107,0.07);
+    border-left-color: var(--red);
+    color: #d8b0b0;
+  }
+
+  /* ─── COLLAPSIBLE ─── */
+  details {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    margin-bottom: 0.75rem;
+    overflow: hidden;
+  }
+
+  summary {
+    padding: 1rem 1.25rem;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 0.9rem;
+    list-style: none;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    user-select: none;
+  }
+
+  summary::-webkit-details-marker { display: none; }
+
+  summary::after {
+    content: '+';
+    font-family: 'Space Mono', monospace;
+    color: var(--accent);
+    font-size: 1.2rem;
+    transition: transform 0.2s;
+  }
+
+  details[open] summary::after { content: '−'; }
+
+  details > div { padding: 0 1.25rem 1.25rem; border-top: 1px solid var(--border); padding-top: 1rem; }
+
+  /* Footer */
+  footer {
+    border-top: 1px solid var(--border);
+    padding: 1.5rem 2rem;
+    text-align: center;
+    font-size: 0.78rem;
+    color: var(--text-muted);
+    font-family: 'Space Mono', monospace;
+  }
+
+  /* ─── VERIFICA ─── */
+  .q-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1.5rem 1.75rem;
+    margin-bottom: 1rem;
+    transition: border-color 0.2s;
+  }
+  .q-card:hover { border-color: #3a4560; }
+  .q-prompt {
+    display: flex;
+    gap: 1rem;
+    align-items: flex-start;
+    margin-bottom: 1rem;
+  }
+  .q-num {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: #0d1117;
+    background: var(--accent);
+    width: 24px; height: 24px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+  .q-prompt p { font-size: 0.95rem; line-height: 1.6; }
+  .q-input {
+    width: 100%;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 0.75rem 1rem;
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 0.88rem;
+    color: var(--text);
+    resize: vertical;
+    min-height: 80px;
+    outline: none;
+    transition: border-color 0.2s;
+    margin-bottom: 0.75rem;
+    display: block;
+  }
+  .q-input:focus { border-color: var(--accent); }
+  .q-toggle {
+    background: none;
+    border: 1px solid var(--border);
+    color: var(--text-muted);
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 0.82rem;
+    padding: 0.4rem 0.9rem;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .q-toggle:hover { border-color: var(--accent); color: var(--accent); }
+  .q-answer {
+    display: none;
+    margin-top: 1rem;
+    background: rgba(0,212,160,0.06);
+    border: 1px solid rgba(0,212,160,0.25);
+    border-radius: 8px;
+    padding: 1rem 1.25rem;
+    font-size: 0.88rem;
+    line-height: 1.8;
+    color: #b8d8c8;
+  }
+  .q-answer code {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.78rem;
+    background: #0a0d12;
+    padding: 0.1rem 0.4rem;
+    border-radius: 3px;
+    color: var(--accent);
+  }
+  .q-answer.visible { display: block; }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">IPv4<span>/</span>Studio</div>
+  <nav>
+    <button class="active" onclick="showSection('home')">Home</button>
+    <button onclick="showSection('teoria')">📖 Teoria IPv4</button>
+    <button onclick="showSection('pratica')">⚙️ Pratica</button>
+    <button onclick="showSection('arp')">🔗 ARP & DHCP</button>
+    <button onclick="showSection('verifica')">🎯 Verifica</button>
+    <button onclick="showSection('esercizi')">✏️ Esercizi</button>
+  </nav>
+</header>
+
+<!-- ═══════════════ HOME ═══════════════ -->
+<section id="home" class="active">
+  <div class="hero">
+    <div class="hero-tag">SISTEMI E RETI — UNITÀ 2 & 6</div>
+    <h1>Reti: IPv4, ARP & DHCP</h1>
+    <p>Guida completa: indirizzamento IPv4, classi, subnet mask, indirizzi privati, protocollo ARP e assegnazione automatica DHCP.</p>
+    <div class="hero-btns">
+      <button class="btn-primary" onclick="showSection('teoria')">Inizia dalla teoria</button>
+      <button class="btn-secondary" onclick="showSection('esercizi')">Vai agli esercizi</button>
+    </div>
+  </div>
+  <main>
+    <div class="grid2">
+      <div class="card" style="cursor:pointer" onclick="showSection('teoria')">
+        <h3><span class="icon">📖</span> Teoria IPv4</h3>
+        <p>Struttura IPv4, classi di indirizzi, subnet mask, indirizzi pubblici/privati e tipi di trasmissione.</p>
+      </div>
+      <div class="card" style="cursor:pointer" onclick="showSection('pratica')">
+        <h3><span class="icon">⚙️</span> Pratica & Esempi</h3>
+        <p>Calcolatore interattivo di network address, esempi risolti, AND bit a bit e identificazione classi.</p>
+      </div>
+      <div class="card" style="cursor:pointer" onclick="showSection('verifica')">
+        <h3><span class="icon">🎯</span> Verifica</h3>
+        <p>Domande stile compito scritto su livello Rete, IPv4, indirizzamento classful/classless e ARP.</p>
+      </div>
+      <div class="card" style="cursor:pointer" onclick="showSection('arp')">
+        <h3><span class="icon">🔗</span> ARP & DHCP</h3>
+        <p>Come funziona ARP per risolvere gli indirizzi MAC, e DHCP per assegnare automaticamente la configurazione IP.</p>
+      </div>
+      <div class="card" style="cursor:pointer" onclick="showSection('esercizi')">
+        <h3><span class="icon">✏️</span> Esercizi</h3>
+        <p>Tabelle di esercizi come in classe: identifica la classe, calcola il network address, distingui privato/pubblico.</p>
+      </div>
+      <div class="card">
+        <h3><span class="icon">📌</span> Concetti chiave</h3>
+        <div class="pills">
+          <span class="pill pill-green">Classful</span>
+          <span class="pill pill-blue">Classless</span>
+          <span class="pill pill-yellow">Subnet Mask</span>
+          <span class="pill pill-red">NAT</span>
+          <span class="pill pill-green">Subnetting</span>
+          <span class="pill pill-blue">CIDR</span>
+          <span class="pill pill-yellow">ARP</span>
+          <span class="pill pill-red">DHCP</span>
+        </div>
+      </div>
+    </div>
+  </main>
+</section>
+
+<!-- ═══════════════ TEORIA ═══════════════ -->
+<section id="teoria">
+<main>
+  <div class="sec-header">
+    <h2>Teoria — Indirizzamento IPv4</h2>
+    <p>Tutto quello che devi sapere, in ordine logico.</p>
+  </div>
+
+  <!-- 1. Struttura -->
+  <div class="card">
+    <h3><span class="icon">🔢</span> 1. Struttura di un indirizzo IPv4</h3>
+    <p>Un indirizzo IPv4 è un numero di <strong>32 bit</strong>, scritto in <strong>notazione decimale puntata</strong> (dotted decimal notation): quattro numeri da 0 a 255 separati da un punto.</p>
+    <div class="code-block">
+<span class="hl-green">172</span> . <span class="hl-green">16</span> . <span class="hl-green">112</span> . <span class="hl-green">10</span>
+ ↓       ↓       ↓       ↓
+<span class="hl-muted">10101100.00010000.01110000.00001010</span>
+    </div>
+    <p>I 32 bit sono divisi in due parti gerarchiche:</p>
+    <div class="ip-vis-label">
+      <span style="flex:3; color:var(--accent)">▌ Network Prefix (parte di rete)</span>
+      <span style="flex:1; color:var(--blue)">▌ Host Portion</span>
+    </div>
+    <div class="ip-vis">
+      <div class="seg net" style="flex:3">192 . 168 . 0</div>
+      <div class="seg host" style="flex:1">1</div>
+    </div>
+    <p style="margin-top:.75rem; font-size:.85rem; color:var(--text-muted)">Tutti gli host sulla stessa rete condividono il <em>Network Prefix</em> e hanno Host Portion diversa.</p>
+  </div>
+
+  <!-- 2. Classful -->
+  <div class="card">
+    <h3><span class="icon">🏷️</span> 2. Indirizzamento Classful (Classi A, B, C, D, E)</h3>
+    <p>Nel sistema classful, la classe è determinata dai bit più significativi del primo ottetto. Ogni classe ha una subnet mask predefinita.</p>
+    <div class="table-wrap" style="margin-top:1rem">
+      <table>
+        <thead>
+          <tr>
+            <th>Classe</th>
+            <th>Bit iniziali</th>
+            <th>Intervallo 1° ottetto</th>
+            <th>Subnet mask</th>
+            <th>Rete / Host bits</th>
+            <th>Max host/rete</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td><span class="badge badge-a">A</span></td><td class="mono">0</td><td class="mono">1 – 126</td><td class="mono">255.0.0.0 /8</td><td>8 / 24</td><td>16.777.214</td></tr>
+          <tr><td><span class="badge badge-b">B</span></td><td class="mono">10</td><td class="mono">128 – 191</td><td class="mono">255.255.0.0 /16</td><td>16 / 16</td><td>65.534</td></tr>
+          <tr><td><span class="badge badge-c">C</span></td><td class="mono">110</td><td class="mono">192 – 223</td><td class="mono">255.255.255.0 /24</td><td>24 / 8</td><td>254</td></tr>
+          <tr><td><span class="badge badge-d">D</span></td><td class="mono">1110</td><td class="mono">224 – 239</td><td>—</td><td colspan="2">Multicast (nessun host)</td></tr>
+          <tr><td><span class="badge badge-e">E</span></td><td class="mono">1111</td><td class="mono">240 – 255</td><td>—</td><td colspan="2">Riservati (uso futuro)</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="callout yellow">⚠️ L'indirizzo 127.x.x.x è riservato al <strong>loopback</strong> (localhost) e NON appartiene alla classe A utilizzabile.</div>
+  </div>
+
+  <!-- 3. Subnet Mask -->
+  <div class="card">
+    <h3><span class="icon">🎭</span> 3. Subnet Mask</h3>
+    <p>La subnet mask indica al dispositivo quali bit dell'indirizzo identificano la rete e quali l'host. Ha tutti <code>1</code> nella parte di rete e tutti <code>0</code> nella parte host.</p>
+    <div class="code-block">
+<span class="hl-muted">Indirizzo:   </span><span class="hl-green">172.16.112</span>.<span class="hl-blue">10</span>
+<span class="hl-muted">             10101100.00010000.01110000</span>.<span class="hl-blue">00001010</span>
+
+<span class="hl-muted">Subnet mask: </span><span class="hl-green">255.255.255</span>.<span class="hl-blue">0</span>
+<span class="hl-muted">             11111111.11111111.11111111</span>.<span class="hl-blue">00000000</span>  <span class="hl-muted">= /24</span>
+
+<span class="hl-muted">AND bit a bit:</span>
+<span class="hl-muted">             10101100.00010000.01110000</span>.<span class="hl-blue">00000000</span>
+<span class="hl-muted">Rete:        </span><span class="hl-green">172.16.112.0</span>
+    </div>
+    <p>Per calcolare il <strong>Network Address</strong>, si applica l'<strong>AND bit a bit</strong> tra l'indirizzo IP e la subnet mask. I bit a 1 nella mask "mantengono" i bit della rete; i bit a 0 "azzerano" la parte host.</p>
+    <div class="callout">💡 La notazione <strong>CIDR</strong> (es. /24) indica semplicemente quanti bit della subnet mask sono a 1, partendo da sinistra.</div>
+  </div>
+
+  <!-- 4. Network / Broadcast / Host -->
+  <div class="card">
+    <h3><span class="icon">📡</span> 4. Indirizzi speciali in una rete</h3>
+    <p>Per una rete <code>192.168.1.0/24</code>:</p>
+    <div class="table-wrap" style="margin-top:1rem">
+      <table>
+        <thead><tr><th>Tipo</th><th>Indirizzo</th><th>Descrizione</th></tr></thead>
+        <tbody>
+          <tr><td>Network Address</td><td class="mono">192.168.1.0</td><td>Parte host tutta a 0. Identifica la rete. Non assegnabile a host.</td></tr>
+          <tr><td>Host Minimo</td><td class="mono">192.168.1.1</td><td>Primo host assegnabile.</td></tr>
+          <tr><td>Host Massimo</td><td class="mono">192.168.1.254</td><td>Ultimo host assegnabile.</td></tr>
+          <tr><td>Broadcast</td><td class="mono">192.168.1.255</td><td>Parte host tutta a 1. Inviato a tutti gli host della rete.</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="callout">Formula: su una rete <strong>/n</strong>, il numero di host indirizzabili è <strong>2^(32−n) − 2</strong> (si sottraggono l'indirizzo di rete e il broadcast).</div>
+  </div>
+
+  <!-- 5. Indirizzi privati -->
+  <div class="card">
+    <h3><span class="icon">🔒</span> 5. Indirizzi Privati e Pubblici</h3>
+    <p>Gli indirizzi privati sono riservati all'uso nelle reti interne. Non sono raggiungibili direttamente da Internet (si usa il <strong>NAT</strong> per la comunicazione con l'esterno).</p>
+    <div class="table-wrap" style="margin-top:1rem">
+      <table>
+        <thead><tr><th>Blocco</th><th>Intervallo</th><th>N° indirizzi</th><th>Classe</th></tr></thead>
+        <tbody>
+          <tr><td class="mono">10.0.0.0/8</td><td class="mono">10.0.0.0 – 10.255.255.255</td><td>16.777.216</td><td><span class="badge badge-a">A</span></td></tr>
+          <tr><td class="mono">172.16.0.0/12</td><td class="mono">172.16.0.0 – 172.31.255.255</td><td>1.048.576</td><td><span class="badge badge-b">B</span></td></tr>
+          <tr><td class="mono">192.168.0.0/16</td><td class="mono">192.168.0.0 – 192.168.255.255</td><td>65.536</td><td><span class="badge badge-c">C</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="callout red">⚠️ Attenzione: <strong>172.16.x.x – 172.31.x.x</strong> sono privati, ma <strong>172.32.x.x</strong> in poi sono pubblici! Il blocco privato finisce a 172.31.255.255.</div>
+  </div>
+
+  <!-- 6. Tipi trasmissione -->
+  <div class="card">
+    <h3><span class="icon">📨</span> 6. Tipi di Indirizzamento</h3>
+    <div class="grid2">
+      <div>
+        <p><strong style="color:var(--accent)">Unicast</strong></p>
+        <p>Comunicazione uno-a-uno. Il pacchetto contiene l'IP del singolo destinatario. Tipo normale di traffico IP.</p>
+      </div>
+      <div>
+        <p><strong style="color:var(--accent2)">Broadcast</strong></p>
+        <p>Uno-a-tutti. L'IP di destinazione ha la parte host tutta a 1. Es: <code>192.168.1.255</code> oppure <code>255.255.255.255</code> (limited broadcast).</p>
+      </div>
+      <div>
+        <p><strong style="color:var(--blue)">Multicast</strong></p>
+        <p>Uno-a-molti. Inviato a un gruppo di host iscritti. Usa indirizzi di Classe D: <code>224.0.0.0 – 239.255.255.255</code>.</p>
+      </div>
+      <div>
+        <p><strong style="color:var(--text-muted)">Loopback</strong></p>
+        <p>Blocco <code>127.0.0.0/8</code>. Usato per comunicare col dispositivo stesso. Il più famoso è <code>127.0.0.1</code> (localhost).</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- 7. Classful vs Classless -->
+  <div class="card">
+    <h3><span class="icon">⚖️</span> 7. Classful vs Classless (CIDR)</h3>
+    <p><strong>Classful:</strong> La subnet mask è fissa e determinata dalla classe (A=/8, B=/16, C=/24). Spreca molti indirizzi.</p>
+    <p><strong>Classless (CIDR):</strong> La subnet mask può avere qualsiasi lunghezza del prefisso. Permette di assegnare blocchi su misura, senza sprechi.</p>
+    <div class="code-block">
+<span class="hl-muted">Esempio: rete con 50 dispositivi</span>
+
+<span class="hl-yellow">Classful  →</span> Classe C: /24 → 254 host disponibili → <span class="hl-red">204 sprecati!</span>
+<span class="hl-green">Classless →</span> /26 → 2^6 = 64 indirizzi → 62 host → <span class="hl-green">nessuno spreco</span>
+    </div>
+    <div class="callout">CIDR è stato introdotto nel 1993 (RFC 1519) per rallentare l'esaurimento degli indirizzi IPv4.</div>
+  </div>
+
+</main>
+</section>
+
+<!-- ═══════════════ PRATICA ═══════════════ -->
+<section id="pratica">
+<main>
+  <div class="sec-header">
+    <h2>Pratica — Esempi & Calcolatore</h2>
+    <p>Esempi risolti e strumenti interattivi per consolidare le competenze.</p>
+  </div>
+
+  <!-- Calcolatore Network Address -->
+  <div class="calc-box">
+    <h3>🧮 Calcolatore Network Address</h3>
+    <p style="color:var(--text-muted); font-size:.88rem; margin-bottom:1.25rem">Inserisci un indirizzo IP e una subnet mask per calcolare automaticamente il network address, broadcast, range host.</p>
+    <div class="calc-row">
+      <span class="calc-label">Indirizzo IP:</span>
+      <input class="calc-input" id="calcIP" placeholder="es. 192.168.7.9" oninput="calcNetwork()">
+    </div>
+    <div class="calc-row">
+      <span class="calc-label">Subnet Mask:</span>
+      <input class="calc-input" id="calcMask" placeholder="es. 255.255.255.0" oninput="calcNetwork()">
+    </div>
+    <div class="calc-result" id="calcResult"></div>
+  </div>
+
+  <hr class="divider">
+
+  <!-- Esempi risolti -->
+  <h3 style="font-family:'Syne',sans-serif; font-size:1.1rem; font-weight:700; margin-bottom:1.25rem; color:var(--accent2)">Esempi Risolti</h3>
+
+  <details open>
+    <summary>Esempio 1 — Calcolo Network Address con AND bit a bit</summary>
+    <div>
+      <p style="margin-bottom:.75rem; color:var(--text-muted)">Trovare il Network Address di <strong>188.10.18.2</strong> con subnet mask <strong>255.255.0.0</strong></p>
+      <div class="code-block">
+<span class="hl-muted">Indirizzo:   </span><span class="hl-green">188.10</span>.<span class="hl-blue">18.2</span>
+<span class="hl-muted">             10111100.00001010</span>.<span class="hl-blue">00010010.00000010</span>
+
+<span class="hl-muted">Subnet mask: </span><span class="hl-green">255.255</span>.<span class="hl-blue">0.0</span>
+<span class="hl-muted">             11111111.11111111</span>.<span class="hl-blue">00000000.00000000</span>
+
+<span class="hl-muted">AND:         10111100.00001010</span>.<span class="hl-blue">00000000.00000000</span>
+
+<span class="hl-green">→ Network Address: 188.10.0.0</span>
+      </div>
+    </div>
+  </details>
+
+  <details>
+    <summary>Esempio 2 — Identificazione della Classe</summary>
+    <div>
+      <p style="color:var(--text-muted); margin-bottom:.75rem">Come determinare la classe di un indirizzo guardando il primo ottetto.</p>
+      <div class="code-block">
+<span class="hl-green">10.250.1.1</span>  → 1° ottetto = 10 → tra 1-126  → <span class="hl-green">Classe A</span>  → mask <span class="hl-yellow">255.0.0.0</span>
+<span class="hl-green">150.10.15.0</span> → 1° ottetto = 150 → tra 128-191 → <span class="hl-blue">Classe B</span>  → mask <span class="hl-yellow">255.255.0.0</span>
+<span class="hl-green">192.14.2.0</span>  → 1° ottetto = 192 → tra 192-223 → <span class="hl-yellow">Classe C</span>  → mask <span class="hl-yellow">255.255.255.0</span>
+<span class="hl-green">230.230.45.58</span> → 1° ottetto = 230 → tra 224-239 → <span class="hl-red">Classe D</span>  → (multicast)
+<span class="hl-green">249.240.80.78</span> → 1° ottetto = 249 → tra 240-255 → <span class="hl-red">Classe E</span>  → (riservato)
+      </div>
+    </div>
+  </details>
+
+  <details>
+    <summary>Esempio 3 — Porzione di Rete e Host (Classful)</summary>
+    <div>
+      <p style="color:var(--text-muted); margin-bottom:.75rem">Dato un indirizzo classful, separare il network prefix dall'host portion.</p>
+      <div class="code-block">
+<span class="hl-muted">Indirizzo: </span><span class="hl-green">177.100.18.4</span>
+<span class="hl-muted">1° ottetto = 177 → Classe B → i primi 16 bit sono la RETE</span>
+
+<span class="hl-green">Network:  177.100</span>.<span class="hl-blue">0.0</span>  (<span class="hl-muted">i primi 2 ottetti</span>)
+<span class="hl-blue">Host:     18.4</span>          (<span class="hl-muted">gli ultimi 2 ottetti</span>)
+
+─────────────────────────────────────
+<span class="hl-muted">Indirizzo: </span><span class="hl-green">209.240.80.78</span>
+<span class="hl-muted">1° ottetto = 209 → Classe C → i primi 24 bit sono la RETE</span>
+
+<span class="hl-green">Network:  209.240.80</span>.<span class="hl-blue">0</span>  (<span class="hl-muted">i primi 3 ottetti</span>)
+<span class="hl-blue">Host:     78</span>              (<span class="hl-muted">l'ultimo ottetto</span>)
+      </div>
+    </div>
+  </details>
+
+  <details>
+    <summary>Esempio 4 — Privato o Pubblico?</summary>
+    <div>
+      <p style="color:var(--text-muted); margin-bottom:.75rem">Classificare gli indirizzi come privati o pubblici.</p>
+      <div class="code-block">
+<span class="hl-green">192.168.255.253</span> → blocco 192.168.0.0/16  → <span class="hl-green">PRIVATO</span>
+<span class="hl-green">10.100.11.103</span>   → blocco 10.0.0.0/8     → <span class="hl-green">PRIVATO</span>
+<span class="hl-green">172.20.18.1</span>     → blocco 172.16.0.0/12  → <span class="hl-green">PRIVATO</span>  <span class="hl-muted">(172.16–172.31)</span>
+<span class="hl-green">172.32.255.255</span>  → NON nel blocco privato → <span class="hl-red">PUBBLICO</span> <span class="hl-muted">(172.32 > 172.31)</span>
+<span class="hl-green">192.68.0.0</span>      → NON 192.168.x.x       → <span class="hl-red">PUBBLICO</span>
+<span class="hl-green">64.104.0.11</span>     → nessun blocco privato  → <span class="hl-red">PUBBLICO</span>
+      </div>
+      <div class="callout yellow">⚠️ Errore comune: confondere 192.68.x.x con 192.168.x.x. Solo il blocco <strong>192.168.0.0 – 192.168.255.255</strong> è privato!</div>
+    </div>
+  </details>
+
+  <details>
+    <summary>Esempio 5 — Subnetting: creare 2 sottoreti da 192.168.0.0/24</summary>
+    <div>
+      <p style="color:var(--text-muted); margin-bottom:.75rem">Prendendo in prestito 1 bit dalla parte host, si ottengono 2 sottoreti /25.</p>
+      <div class="code-block">
+<span class="hl-muted">Rete di partenza: 192.168.0.0/24 → subnet mask 255.255.255.0</span>
+<span class="hl-muted">Bit rubato: 1 → nuova maschera /25 → 255.255.255.128</span>
+
+<span class="hl-green">Prima sottorete:  192.168.0.0/25</span>
+  Network:    192.168.0.0
+  Host min:   192.168.0.1
+  Host max:   192.168.0.126
+  Broadcast:  192.168.0.127
+  (126 host disponibili)
+
+<span class="hl-blue">Seconda sottorete: 192.168.0.128/25</span>
+  Network:    192.168.0.128
+  Host min:   192.168.0.129
+  Host max:   192.168.0.254
+  Broadcast:  192.168.0.255
+  (126 host disponibili)
+      </div>
+    </div>
+  </details>
+
+</main>
+</section>
+
+<!-- ═══════════════ ARP & DHCP ═══════════════ -->
+<section id="arp">
+<main>
+  <div class="sec-header">
+    <h2>ARP & DHCP</h2>
+    <p>I protocolli che collegano gli indirizzi IP agli indirizzi fisici e che assegnano la configurazione di rete automaticamente.</p>
+  </div>
+
+  <!-- ARP intro -->
+  <div class="card">
+    <h3><span class="icon">🔗</span> 1. ARP — Address Resolution Protocol</h3>
+    <p><strong>ARP</strong> (RFC 826) è un protocollo del livello <strong>Data Link</strong> (livello 2 ISO/OSI) che mette in collegamento gli indirizzi IPv4 con i corrispondenti indirizzi fisici <strong>MAC</strong>.</p>
+    <p>Un pacchetto IP, per essere inviato, deve essere imbustato in una trama del livello Data Link che ha come indirizzo MAC di destinazione quello del dispositivo di rete a cui è destinato. ARP associa l'indirizzo IP al corrispondente indirizzo MAC da inserire nell'intestazione della trama.</p>
+    <div class="ip-vis" style="margin-top:1rem">
+      <div class="seg net" style="flex:2; font-size:0.8rem">IP Address (32 bit)</div>
+      <div class="seg sub" style="flex:1; font-size:0.8rem; background:rgba(247,183,49,0.2); color:var(--accent2)">ARP →</div>
+      <div class="seg host" style="flex:2; font-size:0.8rem">Ethernet MAC Address (48 bit)</div>
+    </div>
+    <p>La corrispondenza IP ↔ MAC è mantenuta in una <strong>ARP table</strong> presente in ogni dispositivo di rete. Le voci hanno un campo <strong>TTL</strong> (Time To Live, da 2 a 20 minuti): quando scadono, vengono cancellate.</p>
+  </div>
+
+  <!-- ARP stessa rete -->
+  <div class="card">
+    <h3><span class="icon">🏠</span> 2. ARP — Mittente e destinatario sulla stessa rete</h3>
+    <p>Quando un host vuole comunicare con un altro host <em>della stessa rete</em>:</p>
+    <div class="code-block">
+<span class="hl-muted">Scenario: PC4 (222.2.2.2/24) vuole inviare a PC5 (222.2.2.3/24)</span>
+
+<span class="hl-yellow">PASSO 1 — Controllo ARP table</span>
+  PC4 cerca 222.2.2.3 nella propria ARP table.
+  • Se trovato → usa il MAC direttamente.
+  • Se NON trovato → invia un ARP Request.
+
+<span class="hl-yellow">PASSO 2 — ARP Request (broadcast)</span>
+  PC4 manda in broadcast (FF:FF:FF:FF:FF:FF):
+  <span class="hl-green">IP mittente:       222.2.2.2</span>
+  <span class="hl-green">MAC mittente:      47-90-0F-0B-A9-A0</span>
+  <span class="hl-blue">IP destinatario:   222.2.2.3</span>
+  <span class="hl-blue">MAC destinatario:  FF:FF:FF:FF:FF:FF</span>  <span class="hl-muted">(sconosciuto)</span>
+
+<span class="hl-yellow">PASSO 3 — ARP Reply (unicast)</span>
+  Solo PC5 risponde (riconosce il proprio IP):
+  <span class="hl-green">IP mittente:       222.2.2.3</span>
+  <span class="hl-green">MAC mittente:      44-66-CF-AB-A4-88</span>  <span class="hl-muted">← MAC comunicato!</span>
+  <span class="hl-blue">IP destinatario:   222.2.2.2</span>
+  <span class="hl-blue">MAC destinatario:  47-90-0F-0B-A9-A0</span>
+
+<span class="hl-yellow">PASSO 4 — Aggiornamento ARP table</span>
+  PC4 aggiorna la propria ARP table con la nuova voce:
+  222.2.2.3  →  44-66-CF-AB-A4-88
+    </div>
+    <div class="callout">💡 Solo il nodo interessato risponde all'ARP Request. Tutti gli altri host ricevono il broadcast ma lo ignorano.</div>
+
+    <p style="margin-top:1rem; font-weight:600; font-size:.9rem; color:var(--accent2)">Esempio di ARP table (su PC4 — 222.2.2.2/24):</p>
+    <div class="table-wrap" style="margin-top:.75rem">
+      <table>
+        <thead><tr><th>Indirizzo IP</th><th>Indirizzo MAC</th><th>TTL</th></tr></thead>
+        <tbody>
+          <tr><td class="mono">222.2.2.1</td><td class="mono">A5-08-9F-AA-B4-C2</td><td>13:45:00</td></tr>
+          <tr><td class="mono">222.2.2.2</td><td class="mono">47-90-0F-0B-A9-A0</td><td>13:52:00</td></tr>
+          <tr><td class="mono">222.2.2.3</td><td class="mono">44-66-CF-AB-A4-88</td><td>14:06:00</td></tr>
+          <tr><td class="mono">222.2.2.4</td><td class="mono">77-68-AF-AB-94-AA</td><td>14:13:00</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ARP reti diverse -->
+  <div class="card">
+    <h3><span class="icon">🌐</span> 3. ARP — Mittente e destinatario su reti diverse</h3>
+    <p>Quando l'host di destinazione si trova su una <em>rete diversa</em>, il pacchetto deve passare per il <strong>default gateway</strong> (router). Il mittente non cerca il MAC del destinatario finale, ma il <strong>MAC del gateway</strong>.</p>
+    <div class="code-block">
+<span class="hl-muted">Scenario: PC1 (111.1.1.2/24) vuole inviare a PC5 (222.2.2.2/24)</span>
+<span class="hl-muted">Le due reti sono connesse da Router0:</span>
+<span class="hl-muted">  interfaccia lato 111.1.1.0: IP 111.1.1.1 — MAC A3-45-46-EE-A3-56</span>
+<span class="hl-muted">  interfaccia lato 222.2.2.0: IP 222.2.2.1 — MAC 44-56-F7-55-AC-CF</span>
+
+<span class="hl-yellow">PASSO 1</span> — PC1 capisce che 222.2.2.2 NON è nella sua rete.
+           Deve usare il default gateway.
+
+<span class="hl-yellow">PASSO 2</span> — PC1 cerca 111.1.1.1 (gateway) nella propria ARP table.
+           Se non c'è → ARP Request per il MAC del gateway.
+           Risposta: MAC del router = <span class="hl-green">A3-45-46-EE-A3-56</span>
+
+<span class="hl-yellow">PASSO 3</span> — PC1 invia la trama con:
+           IP sorgente:  111.1.1.2  |  IP dest: <span class="hl-blue">222.2.2.2</span>
+           MAC sorgente: 4-52-6F-AE-A2-51  |  MAC dest: <span class="hl-green">A3-45-46-EE-A3-56</span>
+
+<span class="hl-yellow">PASSO 4</span> — Il router riceve, consulta la routing table,
+           trova 222.2.2.2 nella propria ARP table:
+           MAC = <span class="hl-blue">47-90-0F-0B-A9-A0</span>
+           Invia il pacchetto a PC5 dalla sua interfaccia 222.2.2.1.
+    </div>
+    <div class="callout yellow">⚠️ L'indirizzo IP di destinazione nel pacchetto rimane sempre <strong>222.2.2.2</strong> (l'IP finale), mentre l'indirizzo MAC cambia ad ogni hop (salto) tra router.</div>
+  </div>
+
+  <hr class="divider">
+
+  <!-- DHCP -->
+  <div class="card">
+    <h3><span class="icon">⚙️</span> 4. DHCP — Dynamic Host Configuration Protocol</h3>
+    <p><strong>DHCP</strong> è un protocollo che assegna in modo <strong>automatico</strong> una configurazione di rete ai dispositivi di una LAN. La configurazione comprende:</p>
+    <div class="grid2" style="margin-top:.75rem">
+      <div style="background:var(--surface2); border-radius:8px; padding:1rem;">
+        <p style="color:var(--accent); font-weight:600; margin-bottom:.5rem; font-size:.88rem">Assegnato automaticamente</p>
+        <p style="font-size:.88rem; color:var(--text-muted); line-height:1.8">
+          • Indirizzo IPv4<br>
+          • Subnet mask<br>
+          • Indirizzo del default gateway<br>
+          • Indirizzo del server DNS (opzionale)
+        </p>
+      </div>
+      <div style="background:var(--surface2); border-radius:8px; padding:1rem;">
+        <p style="color:var(--accent2); font-weight:600; margin-bottom:.5rem; font-size:.88rem">Caratteristiche tecniche</p>
+        <p style="font-size:.88rem; color:var(--text-muted); line-height:1.8">
+          • Protocollo <strong>client-server</strong><br>
+          • Livello Applicazione, usa <strong>UDP</strong><br>
+          • Porta <strong>67</strong> lato server<br>
+          • Porta <strong>68</strong> lato client
+        </p>
+      </div>
+    </div>
+    <p style="margin-top:1rem">Il funzionamento si basa su un processo di <strong>"leasing"</strong>: il server "affitta" l'indirizzo IP al client per un certo tempo. Particolarmente utile per reti con molti dispositivi mobili (tablet, smartphone, notebook).</p>
+  </div>
+
+  <!-- DHCP 4 fasi -->
+  <div class="card">
+    <h3><span class="icon">🔄</span> 5. Le 4 fasi del processo DHCP (DORA)</h3>
+    <div class="code-block">
+<span class="hl-muted">─── DORA: Discover → Offer → Request → Acknowledge ───────────────</span>
+
+<span class="hl-green">FASE 1 — DHCP DISCOVER</span> (scoperta)
+  Il client <strong>non ha ancora un IP</strong>. Manda in broadcast:
+  IP sorgente:      <span class="hl-blue">0.0.0.0</span>           <span class="hl-muted">(non ha ancora un IP)</span>
+  IP destinazione:  <span class="hl-blue">255.255.255.255</span>  <span class="hl-muted">(broadcast)</span>
+  MAC destinazione: <span class="hl-blue">FF:FF:FF:FF:FF:FF</span>
+  Messaggio: "C'è un server DHCP in rete?"
+
+<span class="hl-yellow">FASE 2 — DHCP OFFER</span> (offerta)
+  Il server DHCP risponde con un'<strong>offerta</strong>:
+  → IP proposto per il client
+  → Subnet mask
+  → Gateway, DNS
+  → Durata del lease
+
+<span class="hl-accent2">FASE 3 — DHCP REQUEST</span> (richiesta)
+  Il client accetta l'offerta e manda in broadcast
+  la propria scelta (utile se ci sono più server DHCP).
+
+<span class="hl-red">FASE 4 — DHCP ACKNOWLEDGE</span> (conferma)
+  Il server conferma l'assegnazione.
+  Il client configura la propria interfaccia con i parametri ricevuti.
+    </div>
+    <div class="callout">💡 Il processo DORA viene usato anche per il <strong>rinnovo</strong> del lease, quando il tempo di noleggio sta per scadere.</div>
+  </div>
+
+  <!-- confronto ARP vs DHCP -->
+  <div class="card">
+    <h3><span class="icon">📊</span> 6. Confronto ARP vs DHCP</h3>
+    <div class="table-wrap" style="margin-top:.5rem">
+      <table>
+        <thead><tr><th></th><th>ARP</th><th>DHCP</th></tr></thead>
+        <tbody>
+          <tr><td>Scopo</td><td>Trovare il MAC a partire dall'IP</td><td>Assegnare automaticamente IP e config</td></tr>
+          <tr><td>Livello OSI</td><td>Data Link (Livello 2)</td><td>Applicazione (Livello 7)</td></tr>
+          <tr><td>Protocollo trasporto</td><td>—</td><td>UDP (porte 67/68)</td></tr>
+          <tr><td>Tipo messaggio</td><td>Broadcast → Unicast</td><td>Broadcast → Unicast</td></tr>
+          <tr><td>RFC</td><td>RFC 826</td><td>RFC 2131</td></tr>
+          <tr><td>Quando è usato</td><td>Ogni volta che si deve inviare un pacchetto</td><td>Al primo collegamento o scadenza lease</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+</main>
+</section>
+
+<!-- ═══════════════ VERIFICA ═══════════════ -->
+<section id="verifica">
+<main>
+  <div class="sec-header">
+    <h2>Verifica di Teoria</h2>
+    <p>Domande stile compito scritto. Rispondi, poi clicca per vedere la risposta corretta.</p>
+  </div>
+
+  <div class="callout yellow" style="margin-bottom:1.75rem">🎯 Argomenti: Livello Rete (compiti, commutazione) · Protocollo IPv4 (caratteristiche, intestazione) · Indirizzamento classful e classless · Protocollo ARP</div>
+
+  <!-- BLOCCO A: LIVELLO RETE -->
+  <p style="font-family:'Syne',sans-serif; font-weight:700; color:var(--accent); margin-bottom:.75rem; font-size:.85rem; letter-spacing:1px; text-transform:uppercase">A — Il Livello Rete e la Commutazione</p>
+
+  <div class="q-card" id="q1">
+    <div class="q-prompt">
+      <span class="q-num">1</span>
+      <p>Quali sono i <strong>4 compiti principali</strong> del protocollo IP (livello Rete)?</p>
+    </div>
+    <textarea class="q-input" placeholder="Scrivi qui la tua risposta..."></textarea>
+    <button class="q-toggle" onclick="toggleAnswer('a1')">Mostra risposta</button>
+    <div class="q-answer" id="a1">
+      I quattro compiti del protocollo IP sono:<br>
+      <strong>1. Indirizzamento</strong> — ogni dispositivo in Internet deve essere identificato da un indirizzo IP univoco.<br>
+      <strong>2. Imbustamento (encapsulation)</strong> — lato mittente, al segmento del livello Trasporto viene aggiunta l'intestazione IP (livello 3).<br>
+      <strong>3. Routing</strong> — determinare il percorso migliore per far giungere i pacchetti a destinazione.<br>
+      <strong>4. Spacchettamento (decapsulation)</strong> — lato destinazione, l'intestazione IP viene rimossa e i dati passano al livello Trasporto.
+    </div>
+  </div>
+
+  <div class="q-card" id="q2">
+    <div class="q-prompt">
+      <span class="q-num">2</span>
+      <p>Spiega la differenza tra <strong>commutazione di circuito</strong> e <strong>commutazione di pacchetto</strong>.</p>
+    </div>
+    <textarea class="q-input" placeholder="Scrivi qui la tua risposta..."></textarea>
+    <button class="q-toggle" onclick="toggleAnswer('a2')">Mostra risposta</button>
+    <div class="q-answer" id="a2">
+      <strong>Commutazione di circuito (Circuit Switching):</strong> viene stabilita una connessione fisica dedicata tra mittente e destinatario per tutta la durata della comunicazione. La linea è riservata ai due utenti e nessun altro può usarla. Tipica delle reti telefoniche tradizionali. Svantaggio: spreco di risorse durante i silenzi/pause.<br><br>
+      <strong>Commutazione di pacchetto (Packet Switching):</strong> il messaggio viene diviso in pacchetti (PDU) che viaggiano in modo autonomo e indipendente attraverso la rete. Ogni router sceglie il percorso migliore hop per hop. Il canale viene usato solo per il tempo strettamente necessario. È la tecnica usata da IP/Internet.
+    </div>
+  </div>
+
+  <div class="q-card" id="q3">
+    <div class="q-prompt">
+      <span class="q-num">3</span>
+      <p>Nella commutazione di pacchetto, qual è la differenza tra <strong>connection oriented</strong> e <strong>connectionless</strong>? Fai un esempio per ciascuna.</p>
+    </div>
+    <textarea class="q-input" placeholder="Scrivi qui la tua risposta..."></textarea>
+    <button class="q-toggle" onclick="toggleAnswer('a3')">Mostra risposta</button>
+    <div class="q-answer" id="a3">
+      <strong>Connection oriented:</strong> prima di trasmettere dati viene stabilito un <em>circuito virtuale</em>, una strada logica che tutti i pacchetti dello stesso messaggio devono seguire. Garantisce ordine e affidabilità. Esempio: la rete X.25.<br><br>
+      <strong>Connectionless:</strong> non esiste un percorso prestabilito. Ogni pacchetto (datagramma) viene instradato autonomamente dai router hop per hop. Non è garantito l'ordine di arrivo né la consegna. Esempio: il protocollo <strong>IP</strong>. I problemi di ordine e perdita sono gestiti dal livello superiore (TCP).
+    </div>
+  </div>
+
+  <!-- BLOCCO B: IPv4 -->
+  <p style="font-family:'Syne',sans-serif; font-weight:700; color:var(--accent); margin-bottom:.75rem; margin-top:2rem; font-size:.85rem; letter-spacing:1px; text-transform:uppercase">B — Protocollo IPv4: Caratteristiche e Intestazione</p>
+
+  <div class="q-card" id="q4">
+    <div class="q-prompt">
+      <span class="q-num">4</span>
+      <p>IP è definito <strong>connectionless</strong> e <strong>media independent</strong>. Spiega cosa significa ciascuna caratteristica.</p>
+    </div>
+    <textarea class="q-input" placeholder="Scrivi qui la tua risposta..."></textarea>
+    <button class="q-toggle" onclick="toggleAnswer('a4')">Mostra risposta</button>
+    <div class="q-answer" id="a4">
+      <strong>Connectionless:</strong> IP non stabilisce alcuna connessione logica tra mittente e destinatario prima di inviare i pacchetti. Ogni router riceve un pacchetto e lo inoltra verso il prossimo hop senza sapere se arriverà correttamente. IP fa del suo meglio (<em>best effort</em>) ma non garantisce la consegna, l'ordine, né la correzione degli errori — questi compiti spettano a TCP (livello Trasporto).<br><br>
+      <strong>Media independent:</strong> IP è indipendente dal mezzo fisico di trasmissione. Funziona su rame (Ethernet), fibra ottica, Wi-Fi, ecc. Non dipende dalle caratteristiche del livello fisico sottostante.
+    </div>
+  </div>
+
+  <div class="q-card" id="q5">
+    <div class="q-prompt">
+      <span class="q-num">5</span>
+      <p>Descrivi i seguenti campi dell'intestazione IPv4: <strong>TTL</strong>, <strong>Protocol</strong>, <strong>Flags (DF e MF)</strong>, <strong>Fragment Offset</strong>.</p>
+    </div>
+    <textarea class="q-input" placeholder="Scrivi qui la tua risposta..."></textarea>
+    <button class="q-toggle" onclick="toggleAnswer('a5')">Mostra risposta</button>
+    <div class="q-answer" id="a5">
+      <strong>TTL (Time to Live, 8 bit):</strong> contatore che limita la "vita" del pacchetto in rete. Viene decrementato di 1 ad ogni hop (router). Quando arriva a 0, il pacchetto è scartato e viene inviato un messaggio ICMP al mittente. Evita che i pacchetti girino all'infinito in caso di loop di routing.<br><br>
+      <strong>Protocol (8 bit):</strong> indica il protocollo del livello Trasporto contenuto nel payload. Ad esempio: TCP = 6, UDP = 17. Permette al destinatario di sapere a chi consegnare i dati.<br><br>
+      <strong>Flag DF (Don't Fragment):</strong> se DF = 1, il pacchetto non può essere frammentato. Se è troppo grande per un link, viene scartato.<br>
+      <strong>Flag MF (More Fragments):</strong> se MF = 1, il frammento fa parte di un pacchetto più grande e ci sono altri frammenti. MF = 0 sull'ultimo frammento.<br><br>
+      <strong>Fragment Offset (13 bit):</strong> indica la posizione del frammento all'interno del pacchetto originale (in unità di 8 byte). Permette al destinatario di riassemblare i frammenti nell'ordine corretto.
+    </div>
+  </div>
+
+  <div class="q-card" id="q6">
+    <div class="q-prompt">
+      <span class="q-num">6</span>
+      <p>Cos'è la <strong>frammentazione</strong> IPv4? Quando avviene e quali campi dell'intestazione vengono usati?</p>
+    </div>
+    <textarea class="q-input" placeholder="Scrivi qui la tua risposta..."></textarea>
+    <button class="q-toggle" onclick="toggleAnswer('a6')">Mostra risposta</button>
+    <div class="q-answer" id="a6">
+      La frammentazione avviene quando un pacchetto IP è troppo grande per il collegamento da attraversare (supera il <strong>MTU</strong> — Maximum Transmission Unit, imposto dal livello 2). Il pacchetto viene suddiviso in frammenti di dimensione adeguata.<br><br>
+      Campi usati per la frammentazione:<br>
+      • <strong>Identification:</strong> stesso valore in tutti i frammenti dello stesso pacchetto.<br>
+      • <strong>Flag MF:</strong> 1 su tutti i frammenti tranne l'ultimo.<br>
+      • <strong>Fragment Offset:</strong> posizione del frammento nel pacchetto originale (÷8).<br><br>
+      Il riassemblaggio avviene solo a destinazione.
+    </div>
+  </div>
+
+  <!-- BLOCCO C: INDIRIZZAMENTO -->
+  <p style="font-family:'Syne',sans-serif; font-weight:700; color:var(--accent); margin-bottom:.75rem; margin-top:2rem; font-size:.85rem; letter-spacing:1px; text-transform:uppercase">C — Indirizzamento IPv4 Classful e Classless</p>
+
+  <div class="q-card" id="q7">
+    <div class="q-prompt">
+      <span class="q-num">7</span>
+      <p>Come si riconosce la <strong>classe</strong> di un indirizzo IPv4 classful? Indica i range del 1° ottetto per le classi A, B, C, D, E e la relativa subnet mask per A, B, C.</p>
+    </div>
+    <textarea class="q-input" placeholder="Scrivi qui la tua risposta..."></textarea>
+    <button class="q-toggle" onclick="toggleAnswer('a7')">Mostra risposta</button>
+    <div class="q-answer" id="a7">
+      La classe è determinata dai bit più significativi del primo ottetto:<br><br>
+      <strong>Classe A</strong> — 1° ottetto: 1–126 (bit iniziale: 0) — Subnet mask: 255.0.0.0 (/8) — 8 bit rete, 24 bit host<br>
+      <strong>Classe B</strong> — 1° ottetto: 128–191 (bit iniziali: 10) — Subnet mask: 255.255.0.0 (/16) — 16 bit rete, 16 bit host<br>
+      <strong>Classe C</strong> — 1° ottetto: 192–223 (bit iniziali: 110) — Subnet mask: 255.255.255.0 (/24) — 24 bit rete, 8 bit host<br>
+      <strong>Classe D</strong> — 1° ottetto: 224–239 — Multicast (nessun host assegnabile)<br>
+      <strong>Classe E</strong> — 1° ottetto: 240–255 — Riservati per usi futuri<br><br>
+      Nota: 127.x.x.x è riservato al loopback (localhost) e non appartiene alla classe A utilizzabile.
+    </div>
+  </div>
+
+  <div class="q-card" id="q8">
+    <div class="q-prompt">
+      <span class="q-num">8</span>
+      <p>Cos'è la <strong>subnet mask</strong> e come si usa per calcolare il <strong>Network Address</strong>? Spiega con un esempio concreto.</p>
+    </div>
+    <textarea class="q-input" placeholder="Scrivi qui la tua risposta..."></textarea>
+    <button class="q-toggle" onclick="toggleAnswer('a8')">Mostra risposta</button>
+    <div class="q-answer" id="a8">
+      La subnet mask è una sequenza di 32 bit con tutti <strong>1 nella parte di rete</strong> e tutti <strong>0 nella parte host</strong>. Indica al dispositivo quali bit dell'indirizzo identificano la rete e quali l'host.<br><br>
+      Per calcolare il <strong>Network Address</strong> si applica l'<strong>AND bit a bit</strong> tra l'indirizzo IP e la subnet mask:<br><br>
+      <code>Indirizzo:   172.16.112.10  → 10101100.00010000.01110000.00001010</code><br>
+      <code>Subnet mask: 255.255.255.0  → 11111111.11111111.11111111.00000000</code><br>
+      <code>AND:                        → 10101100.00010000.01110000.00000000</code><br>
+      <code>Network Address: 172.16.112.0</code><br><br>
+      La notazione <strong>CIDR</strong> (es. /24) indica il numero di bit a 1 nella subnet mask, da sinistra.
+    </div>
+  </div>
+
+  <div class="q-card" id="q9">
+    <div class="q-prompt">
+      <span class="q-num">9</span>
+      <p>Qual è la differenza tra indirizzamento <strong>classful</strong> e <strong>classless (CIDR)</strong>? Perché è stato introdotto CIDR?</p>
+    </div>
+    <textarea class="q-input" placeholder="Scrivi qui la tua risposta..."></textarea>
+    <button class="q-toggle" onclick="toggleAnswer('a9')">Mostra risposta</button>
+    <div class="q-answer" id="a9">
+      <strong>Classful:</strong> la subnet mask è fissa e dipende dalla classe (A=/8, B=/16, C=/24). Non è flessibile: una rete di 50 host deve usare una Classe C con 254 indirizzi disponibili, sprecandone 204.<br><br>
+      <strong>Classless (CIDR — Classless Inter-Domain Routing):</strong> introdotto con RFC 1519 nel 1993, permette una subnet mask di qualsiasi lunghezza. Per 50 host si usa /26 (62 host disponibili), ottimizzando l'uso degli indirizzi.<br><br>
+      CIDR è stato introdotto per rallentare l'<strong>esaurimento degli indirizzi IPv4</strong> (avvenuto nel 2011) e ridurre le dimensioni delle tabelle di routing.
+    </div>
+  </div>
+
+  <div class="q-card" id="q10">
+    <div class="q-prompt">
+      <span class="q-num">10</span>
+      <p>Quali sono i tre blocchi di <strong>indirizzi privati</strong> IPv4? Perché esistono e come vengono usati su Internet?</p>
+    </div>
+    <textarea class="q-input" placeholder="Scrivi qui la tua risposta..."></textarea>
+    <button class="q-toggle" onclick="toggleAnswer('a10')">Mostra risposta</button>
+    <div class="q-answer" id="a10">
+      I tre blocchi di indirizzi privati (RFC 1918) sono:<br>
+      • <strong>10.0.0.0/8</strong> — da 10.0.0.0 a 10.255.255.255 (Classe A)<br>
+      • <strong>172.16.0.0/12</strong> — da 172.16.0.0 a 172.31.255.255 (Classe B)<br>
+      • <strong>192.168.0.0/16</strong> — da 192.168.0.0 a 192.168.255.255 (Classe C)<br><br>
+      Esistono per risparmiare indirizzi pubblici: più LAN possono usare gli stessi indirizzi privati senza conflitti, poiché non sono routable su Internet. Per comunicare con l'esterno, si usa il <strong>NAT</strong> (Network Address Translation), che traduce l'indirizzo privato in uno pubblico al confine della rete.
+    </div>
+  </div>
+
+  <!-- BLOCCO D: ARP -->
+  <p style="font-family:'Syne',sans-serif; font-weight:700; color:var(--accent); margin-bottom:.75rem; margin-top:2rem; font-size:.85rem; letter-spacing:1px; text-transform:uppercase">D — Protocollo ARP</p>
+
+  <div class="q-card" id="q11">
+    <div class="q-prompt">
+      <span class="q-num">11</span>
+      <p>A cosa serve il protocollo <strong>ARP</strong>? Perché è necessario?</p>
+    </div>
+    <textarea class="q-input" placeholder="Scrivi qui la tua risposta..."></textarea>
+    <button class="q-toggle" onclick="toggleAnswer('a11')">Mostra risposta</button>
+    <div class="q-answer" id="a11">
+      ARP (Address Resolution Protocol, RFC 826) serve a <strong>tradurre un indirizzo IP (32 bit) nel corrispondente indirizzo MAC fisico (48 bit)</strong>.<br><br>
+      È necessario perché: un pacchetto IP, per essere trasmesso su una LAN Ethernet, deve essere incapsulato in una trama del livello Data Link. La trama richiede come indirizzo di destinazione il MAC del dispositivo. Poiché le applicazioni conoscono solo gli indirizzi IP, ARP colma il divario tra il livello Rete (IP) e il livello Data Link (MAC).
+    </div>
+  </div>
+
+  <div class="q-card" id="q12">
+    <div class="q-prompt">
+      <span class="q-num">12</span>
+      <p>Descrivi il funzionamento di ARP quando <strong>mittente e destinatario sono sulla stessa rete</strong>. Cosa contengono ARP Request e ARP Reply?</p>
+    </div>
+    <textarea class="q-input" placeholder="Scrivi qui la tua risposta..."></textarea>
+    <button class="q-toggle" onclick="toggleAnswer('a12')">Mostra risposta</button>
+    <div class="q-answer" id="a12">
+      <strong>1. Controllo ARP table:</strong> l'host mittente cerca l'IP del destinatario nella propria ARP table. Se c'è, usa direttamente il MAC. Se non c'è, avvia la procedura ARP.<br><br>
+      <strong>2. ARP Request (broadcast):</strong> inviato a FF:FF:FF:FF:FF:FF, contiene: IP e MAC del mittente + IP del destinatario cercato + MAC destinatario = FF:FF:FF:FF:FF:FF (sconosciuto).<br><br>
+      <strong>3. ARP Reply (unicast):</strong> solo il nodo con l'IP cercato risponde. Contiene: il proprio indirizzo MAC. La risposta è unicast direttamente al mittente.<br><br>
+      <strong>4. Aggiornamento ARP table:</strong> il mittente aggiunge la nuova corrispondenza IP→MAC nella propria tabella (con TTL da 2 a 20 minuti).
+    </div>
+  </div>
+
+  <div class="q-card" id="q13">
+    <div class="q-prompt">
+      <span class="q-num">13</span>
+      <p>Come funziona ARP quando <strong>mittente e destinatario sono su reti diverse</strong>? Qual è il ruolo del default gateway?</p>
+    </div>
+    <textarea class="q-input" placeholder="Scrivi qui la tua risposta..."></textarea>
+    <button class="q-toggle" onclick="toggleAnswer('a13')">Mostra risposta</button>
+    <div class="q-answer" id="a13">
+      Quando il destinatario è su una rete diversa, il mittente non può raggiungere direttamente il MAC finale. Il percorso deve passare per il <strong>default gateway</strong> (router).<br><br>
+      Il mittente cerca nella propria ARP table il <strong>MAC dell'interfaccia del gateway</strong> (non del destinatario finale). Se non lo trova, invia un ARP Request per l'IP del gateway.<br><br>
+      La trama viene inviata con: IP destinazione = IP finale (invariato), MAC destinazione = MAC del gateway. Il router riceve la trama, consulta la sua routing table, usa la propria ARP table per trovare il MAC del passo successivo e invia il pacchetto. L'<strong>indirizzo IP rimane invariato</strong> lungo tutto il percorso, mentre il <strong>MAC cambia ad ogni hop</strong>.
+    </div>
+  </div>
+
+  <!-- RESET VERIFICA -->
+  <div style="margin-top:2rem; display:flex; gap:1rem; flex-wrap:wrap;">
+    <button class="btn-check" onclick="showAllAnswers()">📖 Mostra tutte le risposte</button>
+    <button class="btn-reset" onclick="hideAllAnswers()">↺ Nascondi tutte</button>
+  </div>
+
+</main>
+</section>
+
+<!-- ═══════════════ ESERCIZI ═══════════════ -->
+<section id="esercizi">
+<main>
+  <div class="sec-header">
+    <h2>Esercizi</h2>
+    <p>Esercizi pratici sugli argomenti della verifica. Compila, verifica, e usa "Mostra soluzioni" se sei bloccato.</p>
+  </div>
+
+  <!-- ── ES 1: CLASSI ── -->
+  <div class="ex-container">
+    <div class="ex-header">
+      <h3>Esercizio 1 — Classe e Subnet Mask</h3>
+      <span class="ex-num">8 indirizzi</span>
+    </div>
+    <div class="ex-body">
+      <p style="color:var(--text-muted); font-size:.88rem; margin-bottom:1.25rem">Per ogni indirizzo indica la classe (A/B/C/D/E) e la subnet mask classful (oppure — se non applicabile).</p>
+      <div class="ex-row" style="font-family:'Space Mono',monospace; font-size:0.75rem; color:var(--text-muted); border-bottom:2px solid var(--border)">
+        <span>INDIRIZZO</span><span>CLASSE</span><span>SUBNET MASK</span>
+      </div>
+      <div id="es1-rows"></div>
+      <div class="ex-actions">
+        <button class="btn-check" onclick="checkEs1()">✓ Verifica</button>
+        <button class="btn-show" onclick="showEs1()">Mostra soluzioni</button>
+        <button class="btn-reset" onclick="resetEs1()">↺ Reset</button>
+      </div>
+      <div id="es1-score"></div>
+    </div>
+  </div>
+
+  <!-- ── ES 2: NETWORK ADDRESS ── -->
+  <div class="ex-container">
+    <div class="ex-header">
+      <h3>Esercizio 2 — Calcolo Network Address</h3>
+      <span class="ex-num">6 calcoli</span>
+    </div>
+    <div class="ex-body">
+      <p style="color:var(--text-muted); font-size:.88rem; margin-bottom:1.25rem">Calcola il Network Address con l'AND bit a bit tra indirizzo e subnet mask.</p>
+      <div class="ex-row" style="font-family:'Space Mono',monospace; font-size:0.75rem; color:var(--text-muted); border-bottom:2px solid var(--border); grid-template-columns:1fr 1fr 1fr;">
+        <span>INDIRIZZO IPv4</span><span>SUBNET MASK</span><span>NETWORK ADDRESS</span>
+      </div>
+      <div id="es3-rows"></div>
+      <div class="ex-actions">
+        <button class="btn-check" onclick="checkEs3()">✓ Verifica</button>
+        <button class="btn-show" onclick="showEs3()">Mostra soluzioni</button>
+        <button class="btn-reset" onclick="resetEs3()">↺ Reset</button>
+      </div>
+      <div id="es3-score"></div>
+    </div>
+  </div>
+
+  <!-- ── ES 3: PRIVATO/PUBBLICO ── -->
+  <div class="ex-container">
+    <div class="ex-header">
+      <h3>Esercizio 3 — Privato o Pubblico?</h3>
+      <span class="ex-num">7 indirizzi</span>
+    </div>
+    <div class="ex-body">
+      <p style="color:var(--text-muted); font-size:.88rem; margin-bottom:1.25rem">Per ogni indirizzo scrivi <em>Privato</em> o <em>Pubblico</em>.</p>
+      <div class="ex-row" style="font-family:'Space Mono',monospace; font-size:0.75rem; color:var(--text-muted); border-bottom:2px solid var(--border); grid-template-columns:1fr 1fr;">
+        <span>INDIRIZZO</span><span>PRIVATO / PUBBLICO</span>
+      </div>
+      <div id="es4-rows"></div>
+      <div class="ex-actions">
+        <button class="btn-check" onclick="checkEs4()">✓ Verifica</button>
+        <button class="btn-show" onclick="showEs4()">Mostra soluzioni</button>
+        <button class="btn-reset" onclick="resetEs4()">↺ Reset</button>
+      </div>
+      <div id="es4-score"></div>
+    </div>
+  </div>
+
+  <!-- ── ES 4: ARP ── -->
+  <div class="ex-container">
+    <div class="ex-header">
+      <h3>Esercizio 4 — Completa la sequenza ARP</h3>
+      <span class="ex-num">ARP stessa rete</span>
+    </div>
+    <div class="ex-body">
+      <p style="color:var(--text-muted); font-size:.88rem; margin-bottom:1.25rem">
+        <strong>Scenario:</strong> PC-A ha IP <code>192.168.1.10</code> e MAC <code>AA-BB-CC-11-22-33</code>. Vuole comunicare con PC-B (IP <code>192.168.1.20</code>) ma non ha il suo MAC in ARP table. Completa i campi del messaggio ARP Request e del Reply.
+      </p>
+      <p style="font-weight:600; font-size:.85rem; margin-bottom:.5rem; color:var(--accent2)">ARP REQUEST (inviato da PC-A)</p>
+      <div class="ex-row" style="grid-template-columns:1fr 1fr; margin-bottom:.1rem">
+        <span class="ex-label">IP mittente</span>
+        <input class="ex-input" id="arp1" placeholder="x.x.x.x">
+      </div>
+      <div class="ex-row" style="grid-template-columns:1fr 1fr; margin-bottom:.1rem">
+        <span class="ex-label">MAC mittente</span>
+        <input class="ex-input" id="arp2" placeholder="XX-XX-XX-XX-XX-XX">
+      </div>
+      <div class="ex-row" style="grid-template-columns:1fr 1fr; margin-bottom:.1rem">
+        <span class="ex-label">IP destinatario</span>
+        <input class="ex-input" id="arp3" placeholder="x.x.x.x">
+      </div>
+      <div class="ex-row" style="grid-template-columns:1fr 1fr; margin-bottom:1rem">
+        <span class="ex-label">MAC destinatario</span>
+        <input class="ex-input" id="arp4" placeholder="(broadcast)">
+      </div>
+      <p style="font-weight:600; font-size:.85rem; margin-bottom:.5rem; color:var(--accent2)">ARP REPLY (inviato da PC-B, MAC: <code>DD-EE-FF-44-55-66</code>)</p>
+      <div class="ex-row" style="grid-template-columns:1fr 1fr; margin-bottom:.1rem">
+        <span class="ex-label">IP mittente</span>
+        <input class="ex-input" id="arp5" placeholder="x.x.x.x">
+      </div>
+      <div class="ex-row" style="grid-template-columns:1fr 1fr; margin-bottom:.1rem">
+        <span class="ex-label">MAC mittente</span>
+        <input class="ex-input" id="arp6" placeholder="XX-XX-XX-XX-XX-XX">
+      </div>
+      <div class="ex-row" style="grid-template-columns:1fr 1fr; margin-bottom:.1rem">
+        <span class="ex-label">IP destinatario</span>
+        <input class="ex-input" id="arp7" placeholder="x.x.x.x">
+      </div>
+      <div class="ex-row" style="grid-template-columns:1fr 1fr">
+        <span class="ex-label">MAC destinatario</span>
+        <input class="ex-input" id="arp8" placeholder="XX-XX-XX-XX-XX-XX">
+      </div>
+      <div class="ex-actions">
+        <button class="btn-check" onclick="checkArp()">✓ Verifica</button>
+        <button class="btn-show" onclick="showArp()">Mostra soluzioni</button>
+        <button class="btn-reset" onclick="resetArp()">↺ Reset</button>
+      </div>
+      <div id="arp-score"></div>
+    </div>
+  </div>
+
+</main>
+</section>
+
+<footer>Reti Studio — Sistemi e Reti | Basato sul libro di testo e sulle slide</footer>
+
+<script>
+// ═══════════════ NAV ═══════════════
+function showSection(id) {
+  document.querySelectorAll('section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  const map = {home:0, teoria:1, pratica:2, arp:3, verifica:4, esercizi:5};
+  document.querySelectorAll('nav button')[map[id]].classList.add('active');
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+
+// ═══════════════ CALCOLATORE ═══════════════
+function ipToOctets(ip) {
+  const parts = ip.trim().split('.');
+  if (parts.length !== 4) return null;
+  const o = parts.map(Number);
+  if (o.some(x => isNaN(x) || x < 0 || x > 255)) return null;
+  return o;
+}
+function octetsToStr(o) { return o.join('.'); }
+function calcNetwork() {
+  const ip = ipToOctets(document.getElementById('calcIP').value);
+  const mask = ipToOctets(document.getElementById('calcMask').value);
+  const res = document.getElementById('calcResult');
+  if (!ip || !mask) { res.classList.remove('visible'); return; }
+  const net = ip.map((b, i) => b & mask[i]);
+  const bcast = net.map((b, i) => b | (255 - mask[i]));
+  const hostMin = [...net]; hostMin[3]++;
+  const hostMax = [...bcast]; hostMax[3]--;
+  const hostBits = mask.reduce((a, b) => a + (255 - b).toString(2).replace(/0/g,'').length, 0);
+  const numHosts = Math.pow(2, hostBits) - 2;
+  const cidr = mask.reduce((a, b) => a + b.toString(2).replace(/0/g,'').length, 0);
+  res.innerHTML = `<span style="color:var(--text-muted)">── Risultato ──────────────────────────</span>
+<span style="color:var(--accent)">Network Address: </span><strong>${octetsToStr(net)}</strong> /${cidr}
+<span style="color:var(--text-muted)">Subnet Mask:     </span>${octetsToStr(mask)}
+<span style="color:var(--blue)">Host Minimo:     </span>${octetsToStr(hostMin)}
+<span style="color:var(--blue)">Host Massimo:    </span>${octetsToStr(hostMax)}
+<span style="color:var(--red)">Broadcast:       </span>${octetsToStr(bcast)}
+<span style="color:var(--accent2)">Host disponibili:</span> ${numHosts > 0 ? numHosts : '—'}`;
+  res.classList.add('visible');
+}
+
+// ═══════════════ VERIFICA ═══════════════
+function toggleAnswer(id) {
+  const el = document.getElementById(id);
+  el.classList.toggle('visible');
+  const btn = el.previousElementSibling;
+  btn.textContent = el.classList.contains('visible') ? 'Nascondi risposta' : 'Mostra risposta';
+}
+function showAllAnswers() {
+  document.querySelectorAll('.q-answer').forEach(el => {
+    el.classList.add('visible');
+    el.previousElementSibling.textContent = 'Nascondi risposta';
+  });
+}
+function hideAllAnswers() {
+  document.querySelectorAll('.q-answer').forEach(el => {
+    el.classList.remove('visible');
+    el.previousElementSibling.textContent = 'Mostra risposta';
+  });
+}
+
+// ═══════════════ EXERCISE DATA ═══════════════
+const es1Data = [
+  {ip:'10.250.1.1',    cls:'A', mask:'255.0.0.0'},
+  {ip:'172.16.45.2',   cls:'B', mask:'255.255.0.0'},
+  {ip:'192.168.1.1',   cls:'C', mask:'255.255.255.0'},
+  {ip:'224.0.0.5',     cls:'D', mask:'—'},
+  {ip:'250.10.10.1',   cls:'E', mask:'—'},
+  {ip:'126.45.80.3',   cls:'A', mask:'255.0.0.0'},
+  {ip:'191.200.10.5',  cls:'B', mask:'255.255.0.0'},
+  {ip:'210.50.20.1',   cls:'C', mask:'255.255.255.0'},
+];
+
+const es3Data = [
+  {ip:'188.10.18.2',    mask:'255.255.0.0',   net:'188.10.0.0'},
+  {ip:'10.10.48.80',    mask:'255.255.255.0',  net:'10.10.48.0'},
+  {ip:'192.149.24.191', mask:'255.255.255.0',  net:'192.149.24.0'},
+  {ip:'150.203.23.19',  mask:'255.255.0.0',    net:'150.203.0.0'},
+  {ip:'10.10.10.10',    mask:'255.0.0.0',      net:'10.0.0.0'},
+  {ip:'200.120.135.15', mask:'255.255.255.0',  net:'200.120.135.0'},
+];
+
+const es4Data = [
+  {ip:'192.168.255.253', ans:'Privato'},
+  {ip:'64.104.0.11',     ans:'Pubblico'},
+  {ip:'10.100.11.103',   ans:'Privato'},
+  {ip:'172.20.18.1',     ans:'Privato'},
+  {ip:'192.68.0.0',      ans:'Pubblico'},
+  {ip:'172.32.255.255',  ans:'Pubblico'},
+  {ip:'192.168.25.2',    ans:'Privato'},
+];
+
+// ═══════════════ BUILD ROWS ═══════════════
+function buildEs1() {
+  document.getElementById('es1-rows').innerHTML = es1Data.map((d,i) => `
+    <div class="ex-row">
+      <span class="ex-label">${d.ip}</span>
+      <input class="ex-input" id="es1-cls-${i}" placeholder="A/B/C/D/E" maxlength="1">
+      <input class="ex-input" id="es1-mask-${i}" placeholder="255.x.x.x o —">
+    </div>`).join('');
+}
+
+function buildEs3() {
+  document.getElementById('es3-rows').innerHTML = es3Data.map((d,i) => `
+    <div class="ex-row" style="grid-template-columns:1fr 1fr 1fr">
+      <span class="ex-label">${d.ip}</span>
+      <span class="ex-label" style="color:var(--text-muted)">${d.mask}</span>
+      <input class="ex-input" id="es3-net-${i}" placeholder="x.x.x.x">
+    </div>`).join('');
+}
+
+function buildEs4() {
+  document.getElementById('es4-rows').innerHTML = es4Data.map((d,i) => `
+    <div class="ex-row" style="grid-template-columns:1fr 1fr">
+      <span class="ex-label">${d.ip}</span>
+      <input class="ex-input" id="es4-ans-${i}" placeholder="Privato / Pubblico">
+    </div>`).join('');
+}
+
+// ═══════════════ CHECK ═══════════════
+function normalize(s) { return s.trim().toLowerCase().replace(/\s+/g,''); }
+function scoreHtml(correct, total) {
+  const pct = Math.round(correct/total*100);
+  const cls = pct >= 80 ? 'good' : pct >= 50 ? 'mid' : 'bad';
+  return `<div class="score-badge ${cls}">Punteggio: ${correct}/${total} (${pct}%)</div>`;
+}
+
+function checkEs1() {
+  let ok = 0;
+  es1Data.forEach((d,i) => {
+    const clsEl = document.getElementById(`es1-cls-${i}`);
+    const maskEl = document.getElementById(`es1-mask-${i}`);
+    const clsOk = normalize(clsEl.value) === normalize(d.cls);
+    const maskOk = normalize(maskEl.value) === normalize(d.mask);
+    clsEl.className = 'ex-input ' + (clsOk ? 'correct' : clsEl.value ? 'wrong' : '');
+    maskEl.className = 'ex-input ' + (maskOk ? 'correct' : maskEl.value ? 'wrong' : '');
+    if (clsOk && maskOk) ok++;
+  });
+  document.getElementById('es1-score').innerHTML = scoreHtml(ok, es1Data.length);
+}
+function showEs1() {
+  es1Data.forEach((d,i) => {
+    const c=document.getElementById(`es1-cls-${i}`); c.value=d.cls; c.className='ex-input correct';
+    const m=document.getElementById(`es1-mask-${i}`); m.value=d.mask; m.className='ex-input correct';
+  });
+  document.getElementById('es1-score').innerHTML='';
+}
+function resetEs1() {
+  es1Data.forEach((d,i) => {
+    ['cls','mask'].forEach(t => { const e=document.getElementById(`es1-${t}-${i}`); e.value=''; e.className='ex-input'; });
+  });
+  document.getElementById('es1-score').innerHTML='';
+}
+
+function checkEs3() {
+  let ok = 0;
+  es3Data.forEach((d,i) => {
+    const el = document.getElementById(`es3-net-${i}`);
+    const correct = normalize(el.value) === normalize(d.net);
+    el.className = 'ex-input ' + (correct ? 'correct' : el.value ? 'wrong' : '');
+    if (correct) ok++;
+  });
+  document.getElementById('es3-score').innerHTML = scoreHtml(ok, es3Data.length);
+}
+function showEs3() {
+  es3Data.forEach((d,i) => { const e=document.getElementById(`es3-net-${i}`); e.value=d.net; e.className='ex-input correct'; });
+  document.getElementById('es3-score').innerHTML='';
+}
+function resetEs3() {
+  es3Data.forEach((d,i) => { const e=document.getElementById(`es3-net-${i}`); e.value=''; e.className='ex-input'; });
+  document.getElementById('es3-score').innerHTML='';
+}
+
+function checkEs4() {
+  let ok = 0;
+  es4Data.forEach((d,i) => {
+    const el = document.getElementById(`es4-ans-${i}`);
+    const correct = normalize(el.value) === normalize(d.ans);
+    el.className = 'ex-input ' + (correct ? 'correct' : el.value ? 'wrong' : '');
+    if (correct) ok++;
+  });
+  document.getElementById('es4-score').innerHTML = scoreHtml(ok, es4Data.length);
+}
+function showEs4() {
+  es4Data.forEach((d,i) => { const e=document.getElementById(`es4-ans-${i}`); e.value=d.ans; e.className='ex-input correct'; });
+  document.getElementById('es4-score').innerHTML='';
+}
+function resetEs4() {
+  es4Data.forEach((d,i) => { const e=document.getElementById(`es4-ans-${i}`); e.value=''; e.className='ex-input'; });
+  document.getElementById('es4-score').innerHTML='';
+}
+
+// ═══════════════ ARP EXERCISE ═══════════════
+const arpAnswers = [
+  {id:'arp1', val:'192.168.1.10'},
+  {id:'arp2', val:'AA-BB-CC-11-22-33'},
+  {id:'arp3', val:'192.168.1.20'},
+  {id:'arp4', val:'FF:FF:FF:FF:FF:FF'},
+  {id:'arp5', val:'192.168.1.20'},
+  {id:'arp6', val:'DD-EE-FF-44-55-66'},
+  {id:'arp7', val:'192.168.1.10'},
+  {id:'arp8', val:'AA-BB-CC-11-22-33'},
+];
+function normalize2(s) { return s.trim().toLowerCase().replace(/[-:]/g,'').replace(/\s/g,''); }
+function checkArp() {
+  let ok = 0;
+  arpAnswers.forEach(a => {
+    const el = document.getElementById(a.id);
+    const correct = normalize2(el.value) === normalize2(a.val);
+    el.className = 'ex-input ' + (correct ? 'correct' : el.value ? 'wrong' : '');
+    if (correct) ok++;
+  });
+  document.getElementById('arp-score').innerHTML = scoreHtml(ok, arpAnswers.length);
+}
+function showArp() {
+  arpAnswers.forEach(a => { const e=document.getElementById(a.id); e.value=a.val; e.className='ex-input correct'; });
+  document.getElementById('arp-score').innerHTML='';
+}
+function resetArp() {
+  arpAnswers.forEach(a => { const e=document.getElementById(a.id); e.value=''; e.className='ex-input'; });
+  document.getElementById('arp-score').innerHTML='';
+}
+
+// ═══════════════ INIT ═══════════════
+buildEs1(); buildEs3(); buildEs4();
+</script>
+</body>
+</html>
